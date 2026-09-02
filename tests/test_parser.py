@@ -5,8 +5,7 @@ de texte. Décisions non spécifiées documentées dans `ADR 0002`.
 """
 
 import pytest
-
-from bttf.parser import parse_cart, CartParsingError
+from bttf.parser import CartParsingError, parse_cart
 
 
 def test_parse_single_title() -> None:

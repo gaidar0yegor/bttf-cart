@@ -13,7 +13,7 @@ Règles du brief :
 from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal
 
-from bttf.catalog import is_saga_movie, get_price
+from bttf.catalog import get_price, is_saga_movie
 
 # Remises exprimées en pourcentage entier (10 % -> 90 % du prix).
 DISCOUNT_PCT_2_DISTINCT: int = 10

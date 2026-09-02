@@ -5,9 +5,8 @@ les erreurs en réponses HTTP explicites (422 pour un film inconnu,
 toujours avec le détail du calcul quand le panier est valide).
 """
 
-from fastapi.testclient import TestClient
-
 from bttf.api import app
+from fastapi.testclient import TestClient
 
 
 def test_api_returns_total_and_breakdown() -> None:

@@ -6,11 +6,10 @@ prouver. L'argent est de l'arithmétique : on vérifie des égalités,
 pas des seuils flous.
 """
 
+from bttf.cart import CartItem, compute_order_total, compute_price_breakdown
+from bttf.catalog import OTHER_MOVIE_PRICE, SAGA_PRICE, SAGA_TITLES
 from hypothesis import given, settings
 from hypothesis import strategies as st
-
-from bttf.cart import CartItem, compute_order_total, compute_price_breakdown
-from bttf.catalog import SAGA_TITLES, SAGA_PRICE, OTHER_MOVIE_PRICE
 
 cart_strategy = st.lists(
     st.builds(

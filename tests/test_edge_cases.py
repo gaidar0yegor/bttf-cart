@@ -6,7 +6,6 @@ sans spécification explicite dans l'énoncé (décisions documentées
 dans `docs/adr/0002-edge-cases.md`).
 """
 
-import pytest
 
 from bttf.cart import CartItem, compute_order_total, compute_price_breakdown
 from bttf.catalog import SAGA_TITLES

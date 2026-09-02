@@ -5,8 +5,7 @@ est mécanisée telle quelle, et toute régression de prix est détectée.
 """
 
 import pytest
-
-from bttf.cart import compute_order_total, CartItem
+from bttf.cart import CartItem, compute_order_total
 
 # Chaque cas : (items, prix_attendu)
 GOLDEN_CASES: list[tuple[list[CartItem], int]] = [
