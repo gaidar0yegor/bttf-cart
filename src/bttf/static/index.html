@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BTTF DVD Shop — Promotion 2000</title>
+  <style>
+    :root {
+      --bg: #0b0b12;
+      --panel: #14141f;
+      --accent: #ff7a00;
+      --accent-soft: #ff9d3c;
+      --text: #f2ede4;
+      --muted: #8b8794;
+      --ok: #35d07f;
+      --err: #ff4d4f;
+      --line: #2a2a3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 500px at 70% -10%, #1d1530 0%, transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Courier New", ui-monospace, monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 640px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 0 0 1px #000, 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+    h1 .flux { color: var(--accent); }
+    .subtitle { color: var(--muted); font-size: 13px; margin: 0 0 22px; }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      background: #0d0d16;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      font: inherit;
+      font-size: 15px;
+      resize: vertical;
+    }
+    textarea:focus { outline: none; border-color: var(--accent); }
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
+    .presets button {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font: inherit;
+      font-size: 12px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .presets button:hover { color: var(--text); border-color: var(--accent); }
+    .row { display: flex; gap: 12px; align-items: center; }
+    .btn {
+      flex: 1;
+      background: var(--accent);
+      color: #0b0b12;
+      border: none;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 13px 18px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn:hover { background: var(--accent-soft); }
+    .btn:active { transform: translateY(1px); }
+    #status { font-size: 13px; min-height: 18px; }
+    #status.err { color: var(--err); }
+    #status.ok { color: var(--ok); }
+    .result { display: none; margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+    .result.visible { display: block; }
+    .result table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .result td { padding: 6px 0; }
+    .result td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .result .muted { color: var(--muted); }
+    .result .discount { color: var(--ok); }
+    .result .total-row td { border-top: 1px solid var(--line); padding-top: 10px; font-size: 18px; font-weight: 700; }
+    .total-row .big { color: var(--accent); font-size: 24px; }
+    .footer { margin-top: 22px; font-size: 11px; color: var(--muted); text-align: center; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">☢ Promotion 2000</span>
+    <h1>DVD <span class="flux">Back to the Future</span></h1>
+    <p class="subtitle">Un volet : 15 € · deux volets différents : −10 % · trois volets : −20 % · autres films : 20 €</p>
+
+    <label for="cart">Panier (un film par ligne) :</label>
+    <textarea id="cart" spellcheck="false"
+      placeholder="Back to the Future 1&#10;Back to the Future 2&#10;La chèvre"></textarea>
+
+    <div class="presets">
+      <button data-cart="Back to the Future 1&#10;Back to the Future 2&#10;Back to the Future 3">Ex. 1 — 3 volets</button>
+      <button data-cart="Back to the Future 1&#10;Back to the Future 3">Ex. 2 — 2 volets</button>
+      <button data-cart="Back to the Future 1&#10;Back to the Future 2&#10;Back to the Future 3&#10;Back to the Future 2">Ex. 4 — doublon</button>
+      <button data-cart="Back to the Future 1&#10;Back to the Future 2&#10;Back to the Future 3&#10;La chèvre">Ex. 5 — + autre film</button>
+    </div>
+
+    <div class="row">
+      <button class="btn" id="compute">⏱ Calculer le prix</button>
+    </div>
+    <p id="status" role="status"></p>
+
+    <section class="result" id="result" aria-live="polite">
+      <table>
+        <tbody>
+          <tr><td class="muted">Sous-total</td><td id="r-subtotal"></td></tr>
+          <tr><td class="muted">DVD de la saga</td><td id="r-saga"></td></tr>
+          <tr><td class="muted">Autres films</td><td id="r-other"></td></tr>
+          <tr class="discount"><td>Remise</td><td id="r-discount"></td></tr>
+          <tr class="total-row"><td>Total</td><td class="big" id="r-total"></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p class="footer">88 mph — 2000 · Ekinox technical exercise · great scott!</p>
+  </main>
+
+  <script>
+    const cartInput = document.getElementById("cart");
+    const statusEl = document.getElementById("status");
+    const resultEl = document.getElementById("result");
+
+    document.querySelectorAll(".presets button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        cartInput.value = btn.dataset.cart;
+        statusEl.textContent = "";
+        resultEl.classList.remove("visible");
+      });
+    });
+
+    document.getElementById("compute").addEventListener("click", async () => {
+      statusEl.className = "";
+      resultEl.classList.remove("visible");
+      try {
+        const res = await fetch("/api/price", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cart_text: cartInput.value }),
+        });
+        const body = await res.json();
+        if (!res.ok) {
+          statusEl.className = "err";
+          statusEl.textContent = body.detail || "Erreur inconnue.";
+          return;
+        }
+        const b = body.breakdown;
+        document.getElementById("r-subtotal").textContent = b.subtotal + " €";
+        document.getElementById("r-saga").textContent = b.saga_line_total + " €";
+        document.getElementById("r-other").textContent = b.other_line_total + " €";
+        document.getElementById("r-discount").textContent =
+          "−" + b.discount_percent + " % (" + b.discount_amount + " €)";
+        document.getElementById("r-total").textContent = body.total + " €";
+        resultEl.classList.add("visible");
+        statusEl.className = "ok";
+        statusEl.textContent = "Prix calculé : " + body.total + " €";
+      } catch (err) {
+        statusEl.className = "err";
+        statusEl.textContent = "Impossible de joindre l'API.";
+      }
+    });
+  </script>
+</body>
+</html>
