@@ -11,6 +11,7 @@ Règles du brief :
 """
 
 from dataclasses import dataclass
+from decimal import ROUND_HALF_UP, Decimal
 
 from bttf.catalog import is_saga_movie, get_price
 
@@ -91,7 +92,13 @@ def compute_price_breakdown(items: list[CartItem]) -> PriceBreakdown:
 
 
 def _percent_of(percent: int, amount: int) -> int:
-    """percent % de amount, en arithmétique entière (arrondi à l'unité)."""
+    """percent % de amount, arrondi à l'unité.
+
+    La politique d'arrondi est explicite : ROUND_HALF_UP (arrondi
+    commercial, en faveur du client), jamais l'arrondi bancaire
+    par défaut de Python. Documenté dans `docs/adr/0003-arithmetic.md`.
+    """
     if percent == 0 or amount == 0:
         return 0
-    return round(amount * percent / 100)
+    ratio = Decimal(percent) / Decimal(100)
+    return int((Decimal(amount) * ratio).to_integral_value(rounding=ROUND_HALF_UP))
