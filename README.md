@@ -43,6 +43,17 @@ make install        # poetry install --with dev
 make test           # pytest + couverture (>= 95 %)
 ```
 
+### Docker (le plus simple)
+
+```bash
+docker build -t bttf-cart .
+docker run --rm -p 8000:8000 bttf-cart
+# -> http://localhost:8000
+```
+
+L'image est multi-stage, tourne en non-root, et ne contient que les
+dépendances de production (pas d'outils de build).
+
 ### API web (interface du brief)
 
 ```bash
